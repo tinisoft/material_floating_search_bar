@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart'
     hide ImplicitlyAnimatedWidget, ImplicitlyAnimatedWidgetState;
 import 'package:flutter/services.dart';
+import 'package:yaru_widgets/yaru_widgets.dart';
 
 import '../material_floating_search_bar_2.dart';
 
@@ -24,7 +25,7 @@ typedef FloatingSearchBarBuilder = Widget Function(
 /// transitions similar to the ones used extensively
 /// by Google in their apps.
 class FloatingSearchBar extends ImplicitlyAnimatedWidget {
-  const FloatingSearchBar({
+  FloatingSearchBar({
     Key? key,
     Duration implicitDuration = const Duration(milliseconds: 600),
     Curve implicitCurve = Curves.linear,
@@ -76,6 +77,7 @@ class FloatingSearchBar extends ImplicitlyAnimatedWidget {
     this.scrollPadding = const EdgeInsets.symmetric(vertical: 16),
     this.showCursor = true,
     bool initiallyHidden = false,
+    required this.onClose,
     this.onKeyEvent,
   })  : showAfter =
             showAfter ?? (initiallyHidden ? const Duration(days: 1) : null),
@@ -394,6 +396,8 @@ class FloatingSearchBar extends ImplicitlyAnimatedWidget {
 
   /// To show the cursor in the textfield or not
   final bool showCursor;
+
+  void Function() onClose;
 
   /// Allow processing any keypress into the input text.
   final ValueChanged<KeyEvent>? onKeyEvent;
@@ -723,6 +727,7 @@ class FloatingSearchBarState extends ImplicitlyAnimatedWidgetState<
 
   Widget _buildInnerBar() {
     final FloatingSearchAppBar textField = FloatingSearchAppBar(
+      onClose: widget.onClose,
       showCursor: widget.showCursor,
       body: null,
       key: barKey,

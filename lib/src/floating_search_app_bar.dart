@@ -12,10 +12,11 @@ typedef OnFocusChangedCallback = void Function(bool isFocused);
 /// This can be considered the base Widget for the full
 /// [FloatingSearchBar].
 class FloatingSearchAppBar extends ImplicitlyAnimatedWidget {
-  const FloatingSearchAppBar({
+  FloatingSearchAppBar({
     Key? key,
     Duration implicitDuration = const Duration(milliseconds: 500),
     Curve implicitCurve = Curves.linear,
+    required this.onClose,
     required this.body,
     this.accentColor,
     this.color,
@@ -59,6 +60,8 @@ class FloatingSearchAppBar extends ImplicitlyAnimatedWidget {
 
   /// to show the cursor or not
   final bool showCursor;
+
+  void Function() onClose;
 
   /// The widget displayed below the [FloatingSearchAppBar]
   final Widget? body;
@@ -499,7 +502,15 @@ class FloatingSearchAppBarState extends ImplicitlyAnimatedWidgetState<
         child: Container(
           height: style.height + statusBarHeight,
           padding: style.padding.add(EdgeInsets.only(top: statusBarHeight)),
-          child: _buildInputAndActions(),
+          child: YaruWindowTitleBar(
+              centerTitle: false,
+              isMinimizable: false,
+              border: BorderSide.none,
+              backgroundColor: Colors.transparent,
+              onClose: (BuildContext context) {
+                widget.onClose();
+              },
+              title: SizedBox(height: 60, child: _buildInputAndActions())),
         ),
       ),
     );
