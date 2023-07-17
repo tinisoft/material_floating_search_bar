@@ -502,15 +502,17 @@ class FloatingSearchAppBarState extends ImplicitlyAnimatedWidgetState<
         child: Container(
           height: style.height + statusBarHeight,
           padding: style.padding.add(EdgeInsets.only(top: statusBarHeight)),
-          child: YaruWindowTitleBar(
-              centerTitle: false,
-              isMinimizable: false,
-              border: BorderSide.none,
-              backgroundColor: Colors.transparent,
-              onClose: (BuildContext context) {
-                widget.onClose();
-              },
-              title: SizedBox(height: 60, child: _buildInputAndActions())),
+          child: Platform.isLinux
+              ? YaruWindowTitleBar(
+                  centerTitle: false,
+                  isMinimizable: false,
+                  border: BorderSide.none,
+                  backgroundColor: Colors.transparent,
+                  onClose: (BuildContext context) {
+                    widget.onClose();
+                  },
+                  title: SizedBox(height: 60, child: _buildInputAndActions()))
+              : _buildInputAndActions(),
         ),
       ),
     );
